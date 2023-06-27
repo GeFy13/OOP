@@ -5,20 +5,14 @@ import com.example.OOP.entity.Employee;
 import com.example.OOP.service.CompanyService;
 import com.example.OOP.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor
-//@RequestMapping("/companies")
 public class MainController {
 
 	private final CompanyService companyService;
