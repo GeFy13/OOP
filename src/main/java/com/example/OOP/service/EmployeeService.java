@@ -13,6 +13,8 @@ import java.util.List;
 public class EmployeeService {
 	private final EmployeeRepository repository;
 
+	private final CompanyService companyService;
+
 	public List<Employee> getAllEmployees() {
 		return repository.findAll();
 	}
@@ -33,9 +35,27 @@ public class EmployeeService {
 		repository.delete(employee);
 	}
 
-	public void add(Employee employee, Company company) {
-		company.hire(employee);
-		repository.save(employee);
+	public Employee add(Employee employee) {
+		employee.setSalary((int) (Math.random() * (100000 - 60000) + 60000));
+		switch (employee.getType()) {
+				case OPERATOR -> {
+				}
+				case MANAGER -> {
+					int income = (int) (Math.random() * (140000 - 115000) + 115000);
+					employee.setSalary(employee.getSalary() + (int) (income * 0.1));
+				}
+				case TOPMANAGER -> {
+					int company_income = employee.getCompany().getIncome();
+					if (company_income > 1000000)
+						employee.setSalary(employee.getSalary() + (int) (company_income * 0.01));
+				}
+			}
+		return repository.save(employee);
+	}
+
+	public Employee hire(Employee employee, int id_company) {
+		employee.setCompany(companyService.getById(id_company));
+		return add(employee);
 	}
 
 	public void delete(int id) {

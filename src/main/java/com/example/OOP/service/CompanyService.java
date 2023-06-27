@@ -29,8 +29,8 @@ public class CompanyService {
 		repository.delete(company);
 	}
 
-	public void add(Company company) {
-		repository.save(company);
+	public Company add(Company company) {
+		return repository.save(company);
 	}
 
 	public void delete(int id) {

@@ -6,6 +6,7 @@ import com.example.OOP.service.CompanyService;
 import com.example.OOP.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,56 +18,57 @@ import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/companies")
+//@RequestMapping("/companies")
 public class MainController {
 
 	private final CompanyService companyService;
 	private final EmployeeService employeeService;
 
-	@GetMapping
+	@GetMapping("/companies")
 	public List<Company> showCompaniesList() {
 		return companyService.getAllCompanies();
 	}
 
-	@PostMapping("/add")
+	@PostMapping("/companies/add")
 	public Company addCompany(@ModelAttribute(value = "company") Company company) {
-		companyService.add(company);
-		return company;
+		return companyService.add(company);
 	}
 
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/companies/{id}")
 	public String deleteCompany(Model model, @PathVariable(value = "id") int id) {
 		companyService.delete(id);
 		return "Company with ID " + id + " was deleted";
 	}
 
-	@GetMapping("/show/{id}")
+	@PostMapping("/companies/{company_id}/add")
+	public Employee hireEmployee(@ModelAttribute(value = "employee") Employee employee,
+								 @PathVariable(value = "company_id") int id) {
+		return employeeService.hire(employee, id);
+	}
+
+	@GetMapping("/companies/show/{id}")
 	public Company showOneCompany(Model model, @PathVariable(value = "id") int id) {
-		Company company = companyService.getById(id);
-		return company;
+		return companyService.getById(id);
 	}
 
-	@GetMapping("/show/{id_company}/show/{id_employee}")
-	public Employee showOneEmployee(Model model,
-								  @PathVariable(value = "id_company") int id_company,
-								  @PathVariable(value = "id_employee") int id_employee) {
-		Employee employee = employeeService.getById(id_employee);
-		return employee;
+	@GetMapping("/employees")
+	public List<Employee> showEmployeesList() {
+		return employeeService.getAllEmployees();
 	}
 
-	@PostMapping("/{id_company}/add")
-	public Employee addEmployee(@ModelAttribute(value = "employee") Employee employee,
-							  @PathVariable(value = "id_company") int id_company) {
-		Company company = companyService.getById(id_company);
-		employeeService.add(employee, company);
-		return employee;
+	@GetMapping("/employees/show/{id}")
+	public Employee showOneEmployee(Model model, @PathVariable(value = "id") int id) {
+		return employeeService.getById(id);
 	}
 
-	@DeleteMapping ("/{id_company}/{id_employee}")
-	public String deleteEmployee(Model model,
-								  @PathVariable(value = "id_company") int id_company,
-								  @PathVariable(value = "id_employee") int id_employee) {
-		employeeService.delete(id_employee);
-		return "Employee with ID " + id_employee + " was deleted";
+	@PostMapping("/employees/add")
+	public Employee addEmployee(@ModelAttribute(value = "employee") Employee employee) {
+		return employeeService.add(employee);
+	}
+
+	@DeleteMapping ("/employees/{id}")
+	public String deleteEmployee(Model model, @PathVariable(value = "id") int id) {
+		employeeService.delete(id);
+		return "Employee with ID " + id + " was deleted";
 	}
 }

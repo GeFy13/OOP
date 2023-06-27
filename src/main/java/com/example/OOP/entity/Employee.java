@@ -26,18 +26,17 @@ public class Employee {
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "type", nullable = false)
-	public Type type;
-
-	public Employee() {
-
-	}
+	private Type type;
 
 	public enum Type {
 		MANAGER, TOPMANAGER, OPERATOR
 	}
 
+	public Employee() {
+		this.type = Type.OPERATOR;
+	}
+
 	public Employee(Type type) {
 		this.type = type;
-		salary = (int)(Math.random()*(80000-60000) + 60000);
 	}
 }
